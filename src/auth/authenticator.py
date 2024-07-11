@@ -1,17 +1,17 @@
 import os
-import json
 from getpass import getpass
-import instaloader
+from instaloader import (
+    Instaloader,
+    TwoFactorAuthRequiredException,
+    BadCredentialsException,
+)
 
 
 class Authenticator:
-    def __init__(
-        self, username=None, password=None, session_file="instagram_session.json"
-    ):
+    def __init__(self, username=None, password=None):
         self.username = username
         self.password = password
-        self.session_file = session_file
-        self.loader = instaloader.Instaloader()
+        self.loader = Instaloader()
 
     def login(self, force=False):
         """Attempt to log in or use existing session."""
@@ -19,17 +19,17 @@ class Authenticator:
             print("Using saved session...")
             return self.loader
 
-        if not self.username or not self.password:
+        if not self.username:
             self.username = input("Enter your Instagram username: ")
+        if not self.password:
             self.password = getpass("Enter your Instagram password: ")
 
         try:
             self.loader.login(self.username, self.password)
-            self._save_session()
             print("Logged in successfully!")
-        except instaloader.exceptions.TwoFactorAuthRequiredException:
+        except TwoFactorAuthRequiredException:
             self._two_factor_auth()
-        except instaloader.exceptions.BadCredentialsException:
+        except BadCredentialsException:
             print("Login failed. Please try again.")
             return self.login(force=True)
 
@@ -39,36 +39,24 @@ class Authenticator:
         """Handle two-factor authentication."""
         code = input("Enter the two-factor authentication code: ")
         self.loader.two_factor_login(code)
-        self._save_session()
         print("Two-factor authentication successful.")
 
-    def _save_session(self):
-        """Save the current session to a file."""
-        session_data = {
-            "username": self.username,
-            "session": self.loader.save_session_to_file(self.username),
-        }
-        with open(self.session_file, "w") as f:
-            json.dump(session_data, f)
-
     def _load_session(self):
-        """Load a saved session from a file."""
-        if os.path.exists(self.session_file):
-            with open(self.session_file, "r") as f:
-                session_data = json.load(f)
-            self.username = session_data["username"]
-            session_file = session_data["session"]
-            try:
-                self.loader.load_session_from_file(self.username, session_file)
-                # Test if the loaded session is valid
-                self.loader.test_login()
-                return True
-            except instaloader.exceptions.LoginRequiredException:
-                print("Saved session is invalid. Logging in again.")
-        return False
+        """Load a saved session if it exists."""
+        if not self.username:
+            return False
+        try:
+            self.loader.load_session_from_file(self.username)
+            return True
+        except FileNotFoundError:
+            return False
 
     def logout(self):
         """Log out and remove the saved session."""
-        if os.path.exists(self.session_file):
-            os.remove(self.session_file)
-        print("Logged out successfully.")
+        if self.username:
+            session_file = f"{self.username}.session"
+            if os.path.exists(session_file):
+                os.remove(session_file)
+            print("Logged out successfully.")
+        else:
+            print("No active session to log out from.")
