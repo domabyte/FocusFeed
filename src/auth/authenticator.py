@@ -6,7 +6,6 @@ from instaloader import (
     BadCredentialsException,
 )
 
-
 class Authenticator:
     def __init__(self, username=None, password=None):
         self.username = username
@@ -34,6 +33,14 @@ class Authenticator:
             return self.login(force=True)
 
         return self.loader
+    
+    def perform_operations(self):
+        """Perform various operations using the loaded session."""
+        try:
+            test_username = self.loader.test_login()
+            print("User name is : ",test_username)
+        except Exception as e:
+            print(f"Error occurred while performing operations: {e}")
 
     def _two_factor_auth(self):
         """Handle two-factor authentication."""
@@ -46,6 +53,7 @@ class Authenticator:
         if not self.username:
             return False
         try:
+            print("User name is : ",self.username)
             self.loader.load_session_from_file(self.username)
             return True
         except FileNotFoundError:
