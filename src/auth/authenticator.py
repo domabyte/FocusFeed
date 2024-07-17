@@ -6,6 +6,7 @@ from instaloader import (
     BadCredentialsException,
 )
 
+
 class Authenticator:
     def __init__(self, username=None, password=None):
         self.username = username
@@ -14,17 +15,18 @@ class Authenticator:
 
     def login(self, force=False):
         """Attempt to log in or use existing session."""
+        if not self.username:
+            self.username = input("Enter your Instagram username: ")
         if not force and self._load_session():
             print("Using saved session...")
             return self.loader
 
-        if not self.username:
-            self.username = input("Enter your Instagram username: ")
         if not self.password:
             self.password = getpass("Enter your Instagram password: ")
 
         try:
             self.loader.login(self.username, self.password)
+            self.loader.save_session_to_file(self.username)
             print("Logged in successfully!")
         except TwoFactorAuthRequiredException:
             self._two_factor_auth()
@@ -33,14 +35,25 @@ class Authenticator:
             return self.login(force=True)
 
         return self.loader
-    
+
     def perform_operations(self):
         """Perform various operations using the loaded session."""
         try:
             test_username = self.loader.test_login()
-            print("User name is : ",test_username)
+            print("User name is : ", test_username)
+
+            target_username = input("Enter the username to download stories from: ")
+            profile = self.loader.check_profile_id(target_username)
+            for story in self.loader.get_stories(userids=[profile.userid]):
+                for item in story.get_items():
+                    if item.typename == 'GraphStoryVideo':
+                        self.loader.download_storyitem(item, target='media/stories/')
+            print(f"Stories of {target_username} downloaded successfully.")
         except Exception as e:
             print(f"Error occurred while performing operations: {e}")
+            if "HTTP error code 401" in str(e):
+                print("Session might be invalid. Please log in again.")
+                self.login(force=True)
 
     def _two_factor_auth(self):
         """Handle two-factor authentication."""
@@ -53,7 +66,7 @@ class Authenticator:
         if not self.username:
             return False
         try:
-            print("User name is : ",self.username)
+            print("User name is : ", self.username)
             self.loader.load_session_from_file(self.username)
             return True
         except FileNotFoundError:
