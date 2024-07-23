@@ -6,7 +6,6 @@ from instaloader import (
     BadCredentialsException,
 )
 
-
 class Authenticator:
     def __init__(self, username=None, password=None):
         self.username = username
@@ -26,7 +25,7 @@ class Authenticator:
 
         try:
             self.loader.login(self.username, self.password)
-            self.loader.save_session_to_file(self.username)
+            self.loader.save_session_to_file()
             print("Logged in successfully!")
         except TwoFactorAuthRequiredException:
             self._two_factor_auth()
@@ -44,10 +43,16 @@ class Authenticator:
 
             target_username = input("Enter the username to download stories from: ")
             profile = self.loader.check_profile_id(target_username)
+            # Create an absolute path for the download directory
+            download_path = os.path.join(os.path.expanduser('~'), 'Documents','FocusFeed', 'media', 'stories')
+        
+            # Ensure the directory exists
+            os.makedirs(download_path, exist_ok=True)
+
             for story in self.loader.get_stories(userids=[profile.userid]):
                 for item in story.get_items():
                     if item.typename == 'GraphStoryVideo':
-                        self.loader.download_storyitem(item, target='media/stories/')
+                        self.loader.download_storyitem(item, target=self.username)
             print(f"Stories of {target_username} downloaded successfully.")
         except Exception as e:
             print(f"Error occurred while performing operations: {e}")
@@ -66,7 +71,7 @@ class Authenticator:
         if not self.username:
             return False
         try:
-            print("User name is : ", self.username)
+            print("User name is : ",self.username)
             self.loader.load_session_from_file(self.username)
             return True
         except FileNotFoundError:
