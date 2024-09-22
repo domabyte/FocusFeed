@@ -25,7 +25,8 @@ class Authenticator:
 
         try:
             self.loader.login(self.username, self.password)
-            self.loader.save_session_to_file()
+            # self.loader.save_session_to_file()
+            self.loader.save_session_to_file(filename='session/session-{}'.format(self.username))
             print("Logged in successfully!")
         except TwoFactorAuthRequiredException:
             self._two_factor_auth()
@@ -37,6 +38,28 @@ class Authenticator:
 
     def perform_operations(self):
         """Perform various operations using the loaded session."""
+        
+        # Load the session from the specified file
+        if not os.path.exists(session_dir):
+            os.makedirs(session_dir)
+
+        session_dir = 'session'
+        if not os.path.exists(session_dir):
+            print("No session files found. Please log in first.")
+            return
+        else:
+            session_files = os.listdir(session_dir)
+            if not session_files:
+                print("No session files found. Please log in first.")
+                return
+            else:
+                print("Session files found. Loading session...")
+                username = session_files[0].split('-')[1]
+                username = username.strip()
+                print("Usernaxncv xme is :", username.strip())
+
+                self.loader.load_session_from_file(session_files[0],f'./{session_dir}/{session_files[0]}')
+
         try:
             test_username = self.loader.test_login()
             print("User name is : ", test_username)
@@ -56,10 +79,11 @@ class Authenticator:
             print(f"Stories of {target_username} downloaded successfully.")
         except Exception as e:
             print(f"Error occurred while performing operations: {e}")
-            if "HTTP error code 401" in str(e):
+            if "checkpoint_required" in str(e):
+                print("Checkpoint required. Please verify your account.")
+            elif "HTTP error code 401" in str(e):
                 print("Session might be invalid. Please log in again.")
                 self.login(force=True)
-
     def _two_factor_auth(self):
         """Handle two-factor authentication."""
         code = input("Enter the two-factor authentication code: ")
@@ -80,7 +104,7 @@ class Authenticator:
     def logout(self):
         """Log out and remove the saved session."""
         if self.username:
-            session_file = f"{self.username}.session"
+            session_file = f"./session/session-{self.username}"
             if os.path.exists(session_file):
                 os.remove(session_file)
             print("Logged out successfully.")
