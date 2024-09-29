@@ -20,23 +20,37 @@ To get started with FocusFeed, follow these steps:
    cd FocusFeed
    ```
 
-2. Install the required dependencies:
+2. Install Poetry (if not already installed):
+
+   Option A: Using the official installer script:
    ```bash
-   pip install -r requirements.txt
+   curl -sSL https://install.python-poetry.org | python3 -
    ```
 
-3. Run the bot:
+   Option B: Using pip:
    ```bash
-   python main.py
+   pip install poetry
+   ```
+
+3. Install the project dependencies:
+   ```bash
+   poetry install
+   ```
+
+4. Run the bot:
+   ```bash
+   poetry run focusfeed
    ```
 
 ## Usage
 
-1. Launch the bot by running `python main.py`.
-2. Follow the on-screen prompts to log in, Enter your Instagram username and password when prompted. FocusFeed securely stores your session for future use, making logins faster.
+1. Launch the bot by running `poetry run focusfeed`.
+2. Follow the on-screen prompts to log in. Enter your Instagram username and password when prompted. FocusFeed securely stores your session for future use, making logins faster.
 3. Use the bot's menu to select the type of content you want to download and enter the username of the account you're interested in.
 
-## Branch Creation
+## Development
+
+### Branch Creation
 
 When creating a new branch, follow these guidelines:
 
@@ -48,7 +62,7 @@ Example:
 git checkout -b feature/add-download-options
 ```
 
-## Commit Formatting
+### Commit Formatting
 
 To maintain a clean commit history, adhere to the following commit message format:
 
@@ -57,7 +71,6 @@ To maintain a clean commit history, adhere to the following commit message forma
 
 <body>
 ```
-
 
 - **type**: The type of change (e.g., feat, fix, docs, style, refactor, test, chore).
 - **scope**: The area of the codebase affected (optional).
@@ -71,7 +84,7 @@ feat(auth): add two-factor authentication support
 Implemented two-factor authentication to enhance security during login.
 ```
 
-## Pipeline Usage
+### Pipeline Usage
 
 To ensure code quality and streamline the development process, we use a CI/CD pipeline. Follow these steps to set up the pipeline:
 
@@ -89,7 +102,7 @@ Contributions are welcome! Please follow these steps to contribute:
 3. Make your changes and commit them with a descriptive message.
 4. Push your branch and create a pull request.
 
-
 ## Acknowledgments
 
-- [Instaloader](https://instaloader.github.io/) for providing the core functionality to download Instagram content. 
+- [Instaloader](https://instaloader.github.io/) for providing the core functionality to download Instagram content.
+- [Poetry](https://python-poetry.org/) for simplifying Python packaging and dependency management.
