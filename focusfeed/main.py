@@ -1,7 +1,5 @@
-from src.auth import Authenticator
-import instaloader
+from src.auth import Authenticator 
 import sys
-
 
 class InstagramBot:
     def __init__(self):

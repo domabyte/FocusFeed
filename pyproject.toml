@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "focusfeed"
+version = "0.1.0"
+description = "FocusFeed is a command-line interface (CLI) bot designed to help you download stories, videos, reels, and more from your favorite Instagram accounts. With a user-friendly interface, you can easily manage your downloads and keep track of your favorite content."
+authors = ["Dikshit <singhdikshit69@gmail.com>"]
+readme = "README.md"
+packages = [
+    { include = "focusfeed" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+tqdm = "^4.66.5"
+instaloader = "^4.13.1"
+
+[tool.poetry.scripts]
+focusfeed = "focusfeed.main:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
