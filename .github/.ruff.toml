@@ -1,0 +1,43 @@
+# Exclude files/directories
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "build",
+    "dist"
+]
+
+# Same as Black.
+line-length = 88 #Why would someone prefer that? Well, with modern wide-screen monitors, some developers argue that longer lines are more readable and reduce unnecessary line breaks. Setting it to 999 is essentially like saying "don't enforce a line length limit."
+indent-width = 4
+
+# Assume Python 3.10
+target-version = "py310"
+
+[lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+]
+ignore = []
+
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+[format]
+# Use double quotes for strings.
+quote-style = "double"
+
+# Indent with spaces
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"

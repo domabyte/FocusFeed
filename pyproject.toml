@@ -12,6 +12,7 @@ packages = [
 python = "^3.10"
 tqdm = "^4.66.5"
 instaloader = "^4.13.1"
+bandit = "^1.8.2"
 
 [tool.poetry.scripts]
 focusfeed = "focusfeed.main:main"

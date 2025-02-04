@@ -1,0 +1,34 @@
+# CodeRabbit configuration
+# version: 1
+# reviews:
+#   high_level_summary: true
+#   poem: false
+#   review_status: true
+#   collapse_walkthrough: false
+#   path_filters:
+#     - "!tests/**"
+#     - "!docs/**"
+#   auto_review:
+#     enabled: true
+#     ignore_title_keywords:
+#       - "WIP"
+#       - "DO NOT MERGE"
+#     drafts: false
+#   notifications:
+#     - type: "comment"
+#       enabled: true
+#   rules:
+#     - name: "Complexity Check"
+#       description: "Check for complex code"
+#       pattern: "cognitive_complexity > 15"
+#       message: "This code might be too complex. Consider breaking it down."
+    
+#     - name: "Line Length"
+#       description: "Check line length"
+#       pattern: "line_length > 88"
+#       message: "Line is too long. Please keep it under 88 characters."
+
+# style:
+#   python:
+#     formatter: "ruff"
+#     max_line_length: 88
