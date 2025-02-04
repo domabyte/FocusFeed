@@ -1,5 +1,6 @@
-from src.auth import Authenticator 
+from src.auth import Authenticator
 import sys
+
 
 class InstagramBot:
     def __init__(self):
@@ -37,7 +38,6 @@ class InstagramBot:
 def main():
     bot = InstagramBot()
     bot.run()
-
 
 if __name__ == "__main__":
     main()
