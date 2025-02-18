@@ -1,34 +1,83 @@
 # CodeRabbit configuration
-# version: 1
-# reviews:
-#   high_level_summary: true
-#   poem: false
-#   review_status: true
-#   collapse_walkthrough: false
-#   path_filters:
-#     - "!tests/**"
-#     - "!docs/**"
-#   auto_review:
-#     enabled: true
-#     ignore_title_keywords:
-#       - "WIP"
-#       - "DO NOT MERGE"
-#     drafts: false
-#   notifications:
-#     - type: "comment"
-#       enabled: true
-#   rules:
-#     - name: "Complexity Check"
-#       description: "Check for complex code"
-#       pattern: "cognitive_complexity > 15"
-#       message: "This code might be too complex. Consider breaking it down."
+version: 1
+early_access: false
+enable_free_tier: true
+language: en
+tone_instructions: 'You are an expert code reviewer in Python. You work in an enterprise software developer team, providing concise and clear code review advice. You only elaborate or provide detailed explanations when requested for personal projects.' 
+reviews:
+  profile: chill
+  high_level_summary: true
+  poem: false
+  review_status: true
+  high_level_summary: true
+  high_level_summary_placeholder: '@coderabbitai summary'
+  collapse_walkthrough: true
+  path_filters:
+    - "!tests/**"
+    - "!docs/**"
+  auto_review:
+    enabled: true
+    ignore_title_keywords:
+      - "WIP"
+      - "DO NOT MERGE"
+    drafts: false
+  notifications:
+    - type: "comment"
+      enabled: true
+  rules:
+    - id: complexity-checks
+      name: "Complexity Check"
+      description: "Check for complex code"
+      pattern: "cognitive_complexity > 15"
+      message: "This code might be too complex. Consider breaking it down."
+      severity: warning
     
-#     - name: "Line Length"
-#       description: "Check line length"
-#       pattern: "line_length > 88"
-#       message: "Line is too long. Please keep it under 88 characters."
+    - id: line-length
+      name: "Line Length"
+      description: "Check line length"
+      pattern: "line_length > 88"
+      message: "Line is too long. Please keep it under 88 characters."
+      severity: warning
 
-# style:
-#   python:
-#     formatter: "ruff"
-#     max_line_length: 88
+    - id: detect-api-keys
+      name: "Detect API Keys"
+      description: "Check for hardcoded API keys"
+      pattern: "(API_KEY|SECRET|PASSWORD) ?= ?['\"].+['\"]"
+      message: "Do not hardcode API keys or secrets."
+      severity: error
+
+    - id: enforce-type-hints
+      name: "Enforce Type Hints"
+      description: "Check for missing type hints"
+      pattern: "def (.*):"
+      message: "All functions should have type hints."
+      severity: error
+
+    - id: no-print-statements
+      name: "No Print Statements"
+      description: "Check for print statements"
+      pattern: print(.*)
+      message: "Avoid using print statements. Use logging instead."
+      severity: warning
+
+    - id: no-debug-statements
+      name: "No Debug Statements"
+      description: "Check for debug statements"
+      pattern: "import pdb|pdb.set_trace()"
+      message: "Remove debugging statements before committing."
+      severity: error
+
+    - id: missing-docstring
+      name: "Missing Docstring"
+      description: "Check for missing docstrings"
+      pattern: "def (.+)\(.*\):\n(?!\\s+\"\"\")"
+      message: "Functions must have docstrings."
+      severity: warning
+
+style:
+  python:
+    formatter: "ruff"
+    max_line_length: 88
+    exclude:
+      - "tests/**"
+      - "docs/**"

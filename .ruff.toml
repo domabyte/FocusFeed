@@ -4,7 +4,13 @@ exclude = [
     ".venv",
     "__pycache__",
     "build",
-    "dist"
+    "dist",
+    ".github",
+    ".env",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".idea",
+    ".vscode"
 ]
 
 # Same as Black.
@@ -25,9 +31,15 @@ select = [
 ]
 ignore = []
 
+extend-select = [
+    "UP",  # pyupgrade (suggests modern syntax)
+    "SIM", # flake8-simplify (reduces redundant code)
+]
+
 # Allow autofix for all enabled rules (when `--fix`) is provided.
-fixable = ["ALL"]
-unfixable = []
+fixable = ["E", "W", "F", "I"]
+unfixable = ["B"]
+
 
 [format]
 # Use double quotes for strings.
