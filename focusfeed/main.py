@@ -1,11 +1,9 @@
 import sys
 
-from src.auth import Authenticator
-
 
 class InstagramBot:
     def __init__(self):
-        self.auth = Authenticator()
+        self.auth = "Hello"
         self.loader = None
 
     def display_menu(self):
