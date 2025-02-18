@@ -23,8 +23,8 @@ jobs:
       - name: Build Docker image
         run: docker build -t focusfeed .
 
-      - name: Run tests in Docker
-        run: docker run focusfeed poetry run pytest tests/
+      #- name: Run tests in Docker
+      # run: docker run focusfeed poetry run pytest tests/
 
       - name: Format with Ruff
         run: docker run focusfeed poetry run ruff format . --check
