@@ -1,5 +1,6 @@
-from src.auth import Authenticator
 import sys
+
+from src.auth import Authenticator
 
 
 class InstagramBot:
