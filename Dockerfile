@@ -19,7 +19,7 @@ WORKDIR /app
 COPY . .
 
 # Install dependencies
-RUN poetry install --no-dev
+RUN poetry install --no-root
 
 # Expose the port the app runs on
 EXPOSE 8000
