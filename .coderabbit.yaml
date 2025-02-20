@@ -9,7 +9,6 @@ reviews:
   high_level_summary: true
   poem: false
   review_status: true
-  high_level_summary: true
   high_level_summary_placeholder: '@coderabbitai summary'
   collapse_walkthrough: true
   path_filters:
