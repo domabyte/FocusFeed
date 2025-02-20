@@ -2,3 +2,5 @@ __pycache__
 *.pyc
 .venv
 poetry.lock
+data/downloaded_videos/*
+data/processed_videos/*
