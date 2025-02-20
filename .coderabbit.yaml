@@ -69,7 +69,7 @@ reviews:
     - id: missing-docstring
       name: "Missing Docstring"
       description: "Check for missing docstrings"
-      pattern: "def (.+)\(.*\):\n(?!\\s+\"\"\")"
+      pattern: "def (.+)\\(.*\\):\\n(?!\\s+\"\"\")"
       message: "Functions must have docstrings."
       severity: warning
 
