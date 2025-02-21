@@ -27,7 +27,7 @@ class YoutubeDownloader:
             datefmt="%Y-%m-%d %H:%M:%S",
             level=logging.DEBUG,
         )
-        self.youtube = build('youtube', 'v3', developerKey=os.getenv("GOOGLE_API_KEY"))
+        self.youtube = build("youtube", "v3", developerKey=os.getenv("GOOGLE_API_KEY"))
 
     @staticmethod
     def __measure_execution_time(func, *args, **kwargs):
@@ -77,21 +77,18 @@ class YoutubeDownloader:
         return video_info
 
     def get_channel_info(self, channel_id):
-        request = self.youtube.channels().list(
-            part="snippet,statistics",
-            id=channel_id
-        )
+        request = self.youtube.channels().list(part="snippet,statistics", id=channel_id)
         response = request.execute()
 
-        if 'items' in response:
-            channel = response['items'][0]
+        if "items" in response:
+            channel = response["items"][0]
             return {
-                'title': channel['snippet']['title'],
-                'description': channel['snippet']['description'],
-                'subscriber_count': channel['statistics']['subscriberCount'],
-                'view_count': channel['statistics']['viewCount'],
-                'video_count': channel['statistics']['videoCount'],
-                'published_at': channel['snippet']['publishedAt']
+                "title": channel["snippet"]["title"],
+                "description": channel["snippet"]["description"],
+                "subscriber_count": channel["statistics"]["subscriberCount"],
+                "view_count": channel["statistics"]["viewCount"],
+                "video_count": channel["statistics"]["videoCount"],
+                "published_at": channel["snippet"]["publishedAt"],
             }
         else:
             return None
