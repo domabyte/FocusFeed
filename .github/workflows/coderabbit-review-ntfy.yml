@@ -1,0 +1,24 @@
+name: Notify CodeRabbit Review Finished
+on:
+  issue_comment:
+    types:
+      - created
+
+jobs:
+  notify:
+    if: >
+      github.event.issue.pull_request &&
+      github.event.comment.user.login == 'coderabbitai[bot]' &&
+      (contains(github.event.comment.body, '') || contains(github.event.comment.body, 'Actionable comments posted'))
+    runs-on: ubuntu-latest
+
+    steps:
+        - name: Send ntfy notification
+          env:
+            NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          run: |
+            curl -X POST \
+              -H "Title: CodeRabbit Review Finished" \
+              -H "Priority: default" \
+              -d "CodeRabbit has finished reviewing Pull Request #${{ github.event.issue.number }}: ${{ github.event.issue.title }}" \
+              https://ntfy.sh/$NTFY_TOPIC
