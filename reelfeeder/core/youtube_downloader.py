@@ -160,9 +160,8 @@ class YoutubeDownloader:
                         print(f"{flag} generated an exception: {exc}")
 
             return video_info
-        except Exception as exec:
-            self.logger.error(f"Failed to get video information: {str(exec)}")
-            raise
+        except Exception as exc:
+            self.logger.error(f"Failed to get video information: {str(exc)}")
 
     def get_channel_info(self, channel_id: str) -> dict:
         """
@@ -277,10 +276,10 @@ def main() -> None:
 
         # Get channel information
         video_info, duration = downloader.channel_info()
-        logging.info(
+        downloader.logging.info(
             "Successfully retrieved video information in %.2f seconds", duration
         )
-        logging.info("Video Info: %s", video_info)
+        downloader.logging.info("Video Info: %s", video_info)
 
     except Exception as e:
         logging.error("Failed to execute main: %s", str(e))
