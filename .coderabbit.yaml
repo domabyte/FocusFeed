@@ -79,3 +79,8 @@ style:
     exclude:
       - "tests/**"
       - "docs/**"
+
+post_review_actions:
+  - name: "Send ntfy notification"
+    run: |
+      curl -H "Title: CodeRabbit Review Complete" -H "Priority: default" -d "CodeRabbit has completed a review for PR #${PR_NUMBER}" ntfy.sh/${NTFY_TOPIC}
