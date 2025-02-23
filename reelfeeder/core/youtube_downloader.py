@@ -9,6 +9,41 @@ from dotenv import load_dotenv
 from googleapiclient.discovery import build
 
 
+def setup_logger(logname: str) -> logging.Logger:
+    """
+    Setup a logger with a file handler.
+
+    Args:
+        logname: Path to the log file
+
+    Returns:
+        Logger object
+    """
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+
+    # File handler for logging to a file
+    file_handler = logging.FileHandler(logname)
+    file_handler.setLevel(logging.DEBUG)
+    file_formatter = logging.Formatter(
+        "%(asctime)s,%(msecs)03d %(name)s %(levelname)s %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+    file_handler.setFormatter(file_formatter)
+    logger.addHandler(file_handler)
+
+    # Stream handler for logging to console
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.DEBUG)
+    console_formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
+    console_handler.setFormatter(console_formatter)
+    logger.addHandler(console_handler)
+
+    return logger
+
+
 class YoutubeDownloader:
     def __init__(
         self, url: str, logname: str, output_path: str, channel_ids: list[str] = None
@@ -31,14 +66,7 @@ class YoutubeDownloader:
         self.output_path = output_path
         if not all([os.getenv("GOOGLE_API_KEY")]):
             raise OSError("Missing required environment variables")
-        self.logger = logging
-        self.logger.basicConfig(
-            filename=logname,
-            filemode="a",
-            format="%(asctime)s,%(msecs)03d %(name)s %(levelname)s %(message)s",
-            datefmt="%Y-%m-%d %H:%M:%S",
-            level=logging.DEBUG,
-        )
+        self.logger = setup_logger(logname)
         self.youtube = build("youtube", "v3", developerKey=os.getenv("GOOGLE_API_KEY"))
 
     @staticmethod
@@ -262,6 +290,9 @@ def main() -> None:
 if __name__ == "__main__":
     try:
         main()
+    except KeyboardInterrupt:
+        logging.warning("Application terminated by user ")
+        sys.exit(0)
     except Exception as e:
         logging.error("Application Failed: %s", str(e))
         sys.exit(1)
