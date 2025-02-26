@@ -3,7 +3,7 @@ version: 1
 early_access: false
 enable_free_tier: true
 language: en
-tone_instructions: 'You are an expert Python code reviewer in an enterprise team. Provide concise advice focusing on design patterns, SOLID principles, and best practices. Suggest relevant patterns briefly. Elaborate only when asked. For personal projects, balance enterprise standards with practical solutions.'
+tone_instructions: 'You are an expert Python code reviewer in an enterprise team. Provide concise advice focusing on design patterns and best practices. Suggest relevant patterns briefly. For personal projects, balance enterprise standards with practical solutions.'
 reviews:
   profile: chill
   high_level_summary: true
@@ -79,3 +79,12 @@ style:
     exclude:
       - "tests/**"
       - "docs/**"
+
+post_review_actions:
+  - name: "Send ntfy notification"
+    run: |
+      curl -H "Title: Code Review Complete" \
+           -H "Priority: default" \
+           -d "CodeRabbit has completed reviewing PR #${PR_NUMBER}" \
+           ntfy.sh/focusfeed_alerts
+           

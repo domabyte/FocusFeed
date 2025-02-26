@@ -31,3 +31,15 @@ jobs:
 
       - name: Lint with Ruff
         run: docker run focusfeed poetry run ruff check .
+
+      - name: Notify result
+        if: always()
+        env: 
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: |
+          if [ ${{ job.status }} == 'success' ]; then
+            curl -H "Title: Lint Passed" -d "Linting passed for PR #${{ github.event.pull_request.number }}" ntfy.sh/$NTFY_TOPIC
+          else
+            LINT_ERRORS=$(cat lint_results.txt | head -n 5)
+            curl -H "Title: Lint Failed" -d "Linting failed for PR #${{ github.event.pull_request.number }}. First few errors: $LINT_ERRORS" ntfy.sh/$NTFY_TOPIC
+          fi
